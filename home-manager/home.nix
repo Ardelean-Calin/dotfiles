@@ -444,6 +444,10 @@ in {
     recursive = true;
     source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/dotfiles/dots/wezterm";
   };
+  xdg.configFile."helix" = {
+    recursive = true;
+    source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/dotfiles/dots/helix";
+  };
 
   # Home Manager is pretty good at managing dotfiles. The primary way to manage
   # plain files is through 'home.file'.
