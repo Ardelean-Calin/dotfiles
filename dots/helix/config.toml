@@ -1,0 +1,59 @@
+# theme = "autumn"
+# theme = "gruvbox_dark_hard"
+theme = "ferra"
+
+[editor]
+line-number = "relative"
+true-color = true
+color-modes = true
+bufferline = "always"
+cursorline = true
+idle-timeout = 50
+mouse = true
+auto-format = true
+
+[editor.soft-wrap]
+enable = true
+
+[editor.cursor-shape]
+insert = "bar"
+normal = "block"
+select = "underline"
+
+[editor.statusline]
+left = ["mode", "spinner"]
+center = ["file-name"]
+right = ["diagnostics", "selections", "position", "file-encoding", "file-line-ending", "file-type"]
+separator = "│"
+
+[editor.indent-guides]
+render = true
+character = "╎" # Some characters that work well: ""▏"", ""┆"", ""┊"", ""⸽""
+skip-levels = 1
+
+[editor.lsp]
+display-inlay-hints = true
+
+[keys.insert]
+C-c = ["normal_mode", "toggle_comments", "insert_mode"]
+
+[keys.normal]
+0 = "goto_line_start"
+G = "goto_line_end"
+X = "extend_line_above"
+ret = ["move_line_down", "goto_line_start"]
+# Move selections up and down
+C-j = ["ensure_selections_forward", "extend_to_line_bounds", "delete_selection", "paste_after"]
+C-k = ["ensure_selections_forward", "extend_to_line_bounds", "delete_selection", "move_line_up", "paste_before"]
+# Don"t enable this as you will disable selection mode
+# v = ["expand_selection"]
+# V = ["shrink_selection"]
+
+[keys.select]
+0 = "goto_line_start"
+G = "goto_line_end"
+# Move selections up and down
+C-j = ["ensure_selections_forward", "extend_to_line_bounds", "delete_selection", "paste_after"]
+C-k = ["ensure_selections_forward", "extend_to_line_bounds", "delete_selection", "move_line_up", "paste_before"]
+v = ["expand_selection"]
+V = ["shrink_selection"]

@@ -1,0 +1,9 @@
+[[language]]
+name = "nix"
+auto-format = true
+formatter = { command = "alejandra" }
+
+[[language]]
+name = "lua"
+auto-format = true
+formatter = { command = "stylua", args = ["-"]}
