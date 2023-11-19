@@ -77,57 +77,30 @@
     pkgs.picoprobe-udev-rules
   ];
   services.udisks2.enable = true;
-
   services.blueman.enable = true;
 
   # Enable the X11 windowing system.
   services.xserver.enable = true;
 
-  # Enable the GNOME Desktop Environment.
   services.xserver.displayManager.gdm.enable = true;
   # services.xserver.displayManager.sddm.enable = true;
+  # Enable the GNOME Desktop Environment.
   # services.xserver.desktopManager.gnome.enable = true;
 
   # Enable and configure Hyprland
 
-  environment = {
-    variables = {
-      NIXOS_OZONE_WL = "1";
-      __GL_GSYNC_ALLOWED = "0";
-      __GL_VRR_ALLOWED = "0";
-      _JAVA_AWT_WM_NONEREPARENTING = "1";
-      SSH_AUTH_SOCK = "/run/user/1000/keyring/ssh";
-      DISABLE_QT5_COMPAT = "0";
-      GDK_BACKEND = "wayland,x11";
-      ANKI_WAYLAND = "1";
-      DIRENV_LOG_FORMAT = "";
-      WLR_DRM_NO_ATOMIC = "1";
-      QT_AUTO_SCREEN_SCALE_FACTOR = "1";
-      QT_QPA_PLATFORM = "wayland";
-      QT_WAYLAND_DISABLE_WINDOWDECORATION = "1";
-      MOZ_ENABLE_WAYLAND = "1";
-      WLR_BACKEND = "vulkan";
-      WLR_RENDERER = "vulkan";
-      # WLR_NO_HARDWARE_CURSORS = "1";
-      XDG_SESSION_TYPE = "wayland";
-      SDL_VIDEODRIVER = "wayland";
-      CLUTTER_BACKEND = "wayland";
-      WLR_DRM_DEVICES = "/dev/dri/card1:/dev/dri/card0";
-    };
-  };
-
   programs.hyprland = {
     enable = true;
-    xwayland.enable = true;
-    nvidiaPatches = true;
-    # xwayland.hidipi = true;
+    xwayland = {
+      enable = true;
+      # hidpi = true;
+    };
+    # nvidiaPatches = true;
+    # xwayland.hidpi = true;
   };
   programs.dconf.enable = true;
 
   # Gaming stuff.
-  # programs.steam = {
-  #   enable = true;
-  # };
   hardware.xpadneo.enable = true;
 
   # Configure keymap in X11
@@ -137,37 +110,21 @@
   };
 
   # GAMING BEGIN
-  services.xserver.videoDrivers = ["nvidia"];
   hardware = {
     opengl = {
       enable = true;
       driSupport = true;
       driSupport32Bit = true;
-      extraPackages = with pkgs; [
-        vaapiVdpau
-        libvdpau-va-gl
-      ];
     };
     pulseaudio.support32Bit = true;
   };
 
+  # GAMING END
   xdg.portal = {
     enable = true;
     extraPortals = [
       pkgs.xdg-desktop-portal-gtk
     ];
-  };
-
-  hardware.nvidia = {
-    modesetting.enable = true;
-    powerManagement.enable = true;
-    open = false;
-    nvidiaSettings = true;
-    package = config.boot.kernelPackages.nvidiaPackages.stable;
-    # prime.offload.enable = true;
-    # prime.offload.enableOffloadCmd = true;
-    # prime.nvidiaBusId = "PCI:10:0:0";
-    # prime.amdgpuBusId = "PCI:16:0:0";
   };
   # GAMING END
 
@@ -239,6 +196,9 @@
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
 
+  environment.variables = {
+    WLR_NO_HARDWARE_CURSORS = "1";
+  };
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
