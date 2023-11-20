@@ -1,0 +1,30 @@
+[colors]
+foreground    = "{color5}"
+background    = "{color0}"
+cursor_bg     = "{color5}"
+cursor_border = "{color5}"
+cursor_fg     = "{color0}"
+selection_bg  = "{color5}"
+selection_fg  = "{color0}"
+
+ansi = [
+  "{color0}",
+  "{color8}",
+  "{color11}",
+  "{color10}",
+  "{color13}",
+  "{color14}",
+  "{color12}",
+  "{color5}"
+]
+
+brights = [
+  "{color3}",
+  "{color8}",
+  "{color11}",
+  "{color10}",
+  "{color13}",
+  "{color14}",
+  "{color12}",
+  "{color7}"
+]
