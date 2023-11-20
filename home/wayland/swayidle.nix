@@ -11,6 +11,7 @@
         command = "${pkgs.gtklock}/bin/gtklock";
       }
     ];
+    systemdTarget = "hyprland-session.target";
   };
   # systemd.user.services.swayidle.Install.WantedBy = lib.mkForce ["hyprland-session.target"];
 }

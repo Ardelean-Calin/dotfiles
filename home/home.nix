@@ -53,7 +53,7 @@ in {
     ./features/rofi.nix
     ./features/special.nix
     ./features/lf.nix
-    ./wayland/swayidle.nix
+    ./wayland
   ];
 
   # Set base16 colorscheme for all supported applications
@@ -444,6 +444,12 @@ in {
     #   echo "Hello, ${config.home.username}!"
     # '')
   ];
+
+  # Copy the wallpapers via symlink
+  home.file.".wallpapers" = {
+    recursive = true;
+    source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/dotfiles/wallpapers";
+  };
 
   # This way we can easily modify the dotfiles in `dots` and have immediate effect.
   xdg.configFile."wezterm" = {
