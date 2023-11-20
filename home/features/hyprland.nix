@@ -33,8 +33,11 @@
     exec-once = waybar &
     # USB Auto-mount
     exec-once = udiskie &
-    # exec-once = ${pkgs.networkmanagerapplet}/bin/nm-applet --indicator &
-    # exec-once = ${pkgs.blueman}/bin/blueman-applet &
+    # Authentication agent
+    exec-once = ${pkgs.polkit-kde-agent}/bin/polkit-kde-agent
+    # Applets
+    exec-once = ${pkgs.networkmanagerapplet}/bin/nm-applet --indicator &
+    exec-once = ${pkgs.blueman}/bin/blueman-applet &
     # exec-once = ${pkgs.swaybg}/bin/swaybg -i ~/.wallpapers/current-wallpaper -m fill &
 
     $mod = SUPER

@@ -53,6 +53,7 @@ in {
     ./features/rofi.nix
     ./features/special.nix
     ./features/lf.nix
+    ./wayland/swayidle.nix
   ];
 
   # Set base16 colorscheme for all supported applications
@@ -380,6 +381,7 @@ in {
     pkgs.swww
     pkgs.wget
     pkgs.unzip
+    pkgs.polkit-kde-agent
     # # Adds the 'hello' command to your environment. It prints a friendly
     # # "Hello, world!" when run.
     # pkgs.hello
@@ -413,6 +415,7 @@ in {
     pkgs.zls # Loaded from overlay. Master version
     pkgs.clang
     pkgs.marksman
+    pkgs.gnome.geary
 
     pkgs.kicad-small
     # pkgs.neovim-nightly # Nightly version of Neovim until 0.10.0 release
