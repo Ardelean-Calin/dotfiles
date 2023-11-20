@@ -11,13 +11,13 @@ config.window_background_opacity = 0.95
 config.color_scheme_dirs = { home .. "/.cache/wal" }
 config.color_scheme = "wezterm-base16-wal"
 config.font = wezterm.font_with_fallback({
+	"Iosevka Extended",
 	"JetBrains Mono",
 	"Font Awesome 6 Free Solid",
 })
 local gpus = wezterm.gui.enumerate_gpus()
 config.webgpu_preferred_adapter = gpus[1]
 config.front_end = "WebGpu"
--- config.front_end = "Software"
 
 config.leader = { key = "a", mods = "CTRL", timeout_milliseconds = 2000 }
 config.keys = {

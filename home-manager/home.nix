@@ -378,6 +378,8 @@ in {
     pkgs.transmission
     pkgs.steam
     pkgs.swww
+    pkgs.wget
+    pkgs.unzip
     # # Adds the 'hello' command to your environment. It prints a friendly
     # # "Hello, world!" when run.
     # pkgs.hello
@@ -430,6 +432,7 @@ in {
     # (pkgs.nerdfonts.override { fonts = [ "FantasqueSansMono" ]; })
 
     (pkgs.nerdfonts.override {fonts = ["JetBrainsMono"];})
+    pkgs.iosevka
 
     # # You can also create simple shell scripts directly inside your
     # # configuration. For example, this adds a command 'my-hello' to your
