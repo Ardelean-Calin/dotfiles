@@ -49,11 +49,11 @@ in {
   imports = [
     inputs.xremap-flake.homeManagerModules.default
     inputs.nix-colors.homeManagerModules.default
-    ./features/hyprland.nix
     ./features/rofi.nix
     ./features/special.nix
     ./features/lf.nix
     ./wayland
+    ./programs
   ];
 
   # Set base16 colorscheme for all supported applications

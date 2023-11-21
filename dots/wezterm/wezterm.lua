@@ -23,12 +23,12 @@ config.leader = { key = "a", mods = "CTRL", timeout_milliseconds = 2000 }
 config.keys = {
 	{
 		key = "-",
-		mods = "CTRL|SHIFT",
+		mods = "LEADER",
 		action = wezterm.action.SplitVertical({ domain = "CurrentPaneDomain" }),
 	},
 	{
-		key = "|",
-		mods = "CTRL|SHIFT",
+		key = "\\",
+		mods = "LEADER",
 		action = wezterm.action.SplitHorizontal({ domain = "CurrentPaneDomain" }),
 	},
 	{

@@ -1,6 +1,7 @@
 {pkgs, ...}: {
   imports = [
     ./swayidle.nix
+    ./hyprland
   ];
 
   # make stuff work on wayland
