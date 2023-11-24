@@ -426,7 +426,7 @@ in {
     pkgs.keepassxc
 
     # My custom shell scripts
-    win11-start
+    # win11-start
 
     # # It is sometimes useful to fine-tune packages, for example, by applying
     # # overrides. You can do that directly here, just don't forget the
@@ -448,7 +448,7 @@ in {
   # Copy the wallpapers via symlink
   home.file.".wallpapers" = {
     recursive = true;
-    source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/dotfiles/wallpapers";
+    source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/dotfiles/dots/wallpapers";
   };
 
   # This way we can easily modify the dotfiles in `dots` and have immediate effect.
