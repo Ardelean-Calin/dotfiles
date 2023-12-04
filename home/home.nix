@@ -375,6 +375,10 @@ in {
   # environment.
   home.packages = [
     change-wallpaper
+
+    pkgs.esphome
+    pkgs.python311
+    pkgs.python311Packages.virtualenv
     pkgs.libnotify
     pkgs.transmission
     pkgs.steam
@@ -477,6 +481,7 @@ in {
   # if you don't want to manage your shell through Home Manager.
   home.sessionVariables = {
     EDITOR = "hx";
+    # LD_LIBRARY_PATH = "$LD_LIBRARY_PATH:$HOME/.nix-profile/lib:${pkgs.gcc-unwrapped.lib}/lib";
   };
 
   # Let Home Manager install and manage itself.

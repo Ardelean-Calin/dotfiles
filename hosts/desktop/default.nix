@@ -5,7 +5,7 @@
   ...
 }: {
   imports = [
-    ./virtualisation
+    # ./virtualisation
   ];
 
   programs.dconf.enable = true;
