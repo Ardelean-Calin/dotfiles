@@ -1,0 +1,6 @@
+keymap:
+  - name: main
+    remap:
+      Esc: Grave
+      CapsLock: Esc
+
