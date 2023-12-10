@@ -1,0 +1,13 @@
+# ~/.config/systemd/user/xremap.service
+[Unit]
+Description=xremap
+
+[Service]
+Restart=always
+RestartSec=10
+ExecStart=/home/calin/.cargo/bin/xremap /home/calin/.config/xremap/config.yml --watch
+Type=simple
+KillMode=process
+
+[Install]
+WantedBy=default.target
