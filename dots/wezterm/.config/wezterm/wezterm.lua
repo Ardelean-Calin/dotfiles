@@ -6,14 +6,14 @@ local home = wezterm.home_dir
 local config = {}
 
 config.hide_tab_bar_if_only_one_tab = true
-config.default_prog = { "/home/calin/.guix-profile/bin/fish", "-l" }
+config.default_prog = { "fish", "-l" }
 config.window_background_opacity = 0.95
 config.enable_wayland = false
 -- config.default_gui_startup_args = { "start", "--always-new-process" }
 -- config.color_scheme_dirs = { home .. "/.cache/wal" }
 -- config.color_scheme = "wezterm-base16-wal"
 config.font = wezterm.font_with_fallback({
-	{ family = "Iosevka Nerd Font Mono", stretch = "Expanded", weight = "Regular" },
+	{ family = "Iosevka", stretch = "Expanded", weight = "Regular" },
 	"JetBrains Mono",
 	"Symbols Nerd Font",
 })

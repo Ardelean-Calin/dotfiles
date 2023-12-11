@@ -1,31 +1,18 @@
 # Edit this configuration file to define what should be installed on
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
-{
-  config,
-  pkgs,
-  ...
-}: {
-  imports = [
-    # Include the results of the hardware scan.
-    ./hardware-configuration.nix
-    ../hosts/desktop
-  ];
 
+{ config, pkgs, ... }:
+
+{
+  imports =
+    [ # Include the results of the hardware scan.
+      ./hardware-configuration.nix
+    ];
+  nix.settings.experimental-features = [ "nix-command" "flakes" ];
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
-
-  # Kernel selection
-  # boot.kernelPackages = pkgs.linuxPackages_latest;
-
-  # Storage optimization
-  nix.optimise.automatic = true;
-  nix.gc = {
-    automatic = true;
-    dates = "weekly";
-    options = "--delete-older-than 30d";
-  };
 
   networking.hostName = "CalinPC"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
@@ -55,70 +42,16 @@
     LC_TIME = "ro_RO.UTF-8";
   };
 
-  fonts = {
-    fonts = with pkgs; [
-      fira
-      roboto
-      noto-fonts-emoji
-      font-awesome
-      (nerdfonts.override {fonts = ["FiraCode" "JetBrainsMono"];})
-    ];
-
-    fontconfig.defaultFonts = {
-      serif = ["Roboto Serif"];
-      sansSerif = ["Fira Sans Book"];
-      monospace = ["JetBrainsMono Nerd Font"];
-      emoji = ["Noto Color Emoji"];
-    };
-  };
-
-  # Add picoprobe udev rules
-  services.udev.packages = [
-    pkgs.picoprobe-udev-rules
-  ];
-  services.udisks2.enable = true;
-  services.blueman.enable = true;
-
   # Enable the X11 windowing system.
   services.xserver.enable = true;
-  services.xserver.videoDrivers = ["nvidia"];
-  hardware.nvidia = {
-    modesetting.enable = true;
-    powerManagement.enable = false;
-    # Experimental and only works on modern Nvidia GPUs (Turing or newer).
-    powerManagement.finegrained = false;
-    # Use the NVidia open source kernel module (not to be confused with the
-    # independent third-party "nouveau" open source driver).
-    # Support is limited to the Turing and later architectures. Full list of
-    # supported GPUs is at:
-    # https://github.com/NVIDIA/open-gpu-kernel-modules#compatible-gpus
-    # Only available from driver 515.43.04+
-    # Currently alpha-quality/buggy, so false is currently the recommended setting.
-    open = false;
-    nvidiaSettings = true;
-    package = config.boot.kernelPackages.nvidiaPackages.stable;
-  };
 
-  services.xserver.displayManager.gdm.enable = true;
-  # services.xserver.displayManager.sddm.enable = true;
   # Enable the GNOME Desktop Environment.
-  # services.xserver.desktopManager.gnome.enable = true;
+  services.xserver.displayManager.gdm.enable = true;
+  services.xserver.desktopManager.gnome.enable = true;
 
-  # Enable and configure Hyprland
-
-  programs.hyprland = {
-    enable = true;
-    xwayland = {
-      enable = true;
-      # hidpi = true;
-    };
-    # nvidiaPatches = true;
-    # xwayland.hidpi = true;
-  };
-  programs.dconf.enable = true;
-
-  # Gaming stuff.
-  hardware.xpadneo.enable = true;
+  hardware.uinput.enable = true;
+  users.groups.uinput.members = ["calin"];
+  users.groups.input.members = ["calin"];
 
   # Configure keymap in X11
   services.xserver = {
@@ -126,49 +59,8 @@
     xkbVariant = "";
   };
 
-  # GAMING BEGIN
-  hardware = {
-    opengl = {
-      enable = true;
-      driSupport = true;
-      driSupport32Bit = true;
-    };
-    pulseaudio.support32Bit = true;
-  };
-
-  # GAMING END
-  xdg.portal = {
-    enable = true;
-    extraPortals = [
-      pkgs.xdg-desktop-portal-gtk
-    ];
-  };
-  # GAMING END
-
-  # Necessary for my logic analyzer to work
-  hardware.saleae-logic.enable = true;
-
   # Enable CUPS to print documents.
   services.printing.enable = true;
-
-  hardware.uinput.enable = true;
-  users.groups.uinput.members = ["calin"];
-  users.groups.input.members = ["calin"];
-
-  services.avahi = {
-    enable = true;
-    nssmdns = true;
-  };
-
-  services.syncthing = {
-    enable = true;
-    overrideFolders = false;
-    overrideDevices = false;
-    user = "calin";
-    dataDir = "/home/calin/";
-    openDefaultPorts = true;
-    # group = "calin";
-  };
 
   # Enable sound with pipewire.
   sound.enable = true;
@@ -194,11 +86,10 @@
   users.users.calin = {
     isNormalUser = true;
     description = "Ardelean Calin";
-    extraGroups = ["networkmanager" "wheel" "libvirtd" "kvm" "dialout"];
+    extraGroups = [ "networkmanager" "wheel" "input" ];
     packages = with pkgs; [
-      hyprpaper
-      # picoprobe-udev-rules
-      #  thunderbird
+      firefox
+    #  thunderbird
     ];
   };
 
@@ -213,30 +104,12 @@
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
 
-  environment.variables = {
-    WLR_NO_HARDWARE_CURSORS = "1";
-  };
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
     vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
-    neovim
-    home-manager
-    lf
-    ripgrep
-    # eza
-    gnumake
-    gcc
-    bat
-    curl
-    pciutils
-    virt-manager
-    looking-glass-client
-    networkmanagerapplet
-    glibc
-    libstdcxx5
-
-    #  wget
+    helix
+  #  wget
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
@@ -247,12 +120,50 @@
   #   enableSSHSupport = true;
   # };
 
-  nix.settings.experimental-features = ["nix-command" "flakes"];
-
   # List services that you want to enable:
 
   # Enable the OpenSSH daemon.
   # services.openssh.enable = true;
+  services.syncthing = {
+    enable = true;
+    settings = {
+      devices.CalinPi = {
+        name = "CalinPi";
+        id = "N2QZJRH-CYN6X3K-AADS3CS-XJ2PZMM-WB33I7S-VFYWB3J-PVHR2EJ-IC6KGQ4";
+      };
+      folders."/home/calin/Sync" = {
+        id = "default";
+        devices = ["CalinPi"];
+        versioning = {
+          type = "simple";
+          params.keep = "10";
+        };
+      };
+    };
+    user = "calin";
+    dataDir = "/home/calin/";
+  };
+  services.avahi.enable = true;
+  services.avahi.nssmdns = true;
+
+  hardware.xpadneo.enable = true;
+  hardware.bluetooth.enable = true;
+  hardware.opengl = {
+    enable = true;
+    driSupport = true;
+    driSupport32Bit = true;
+  };
+  services.xserver.videoDrivers = ["nvidia"];
+  hardware.nvidia = {
+    modesetting.enable = true;
+    powerManagement.enable = false;
+    powerManagement.finegrained = false;
+    open = false;
+    nvidiaSettings = true;
+    # package = config.boot.kernelPackages.nvidiaPackages.stable;
+  };
+
+  programs.steam.enable = true;
 
   # Open ports in the firewall.
   # networking.firewall.allowedTCPPorts = [ ... ];
@@ -266,5 +177,6 @@
   # this value at the release version of the first install of this system.
   # Before changing this value read the documentation for this option
   # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
-  system.stateVersion = "23.05"; # Did you read the comment?
+  system.stateVersion = "23.11"; # Did you read the comment?
+
 }
