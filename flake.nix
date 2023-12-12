@@ -1,13 +1,11 @@
 {
   description = "Calin's NixOS Flake";
-  inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/release-23.11";
-    home-manager = {
-      url = "github:nix-community/home-manager/release-23.11";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-    hyprland.url = "github:hyprwm/Hyprland";
+  inputs.nixpkgs.url = "github:NixOS/nixpkgs/release-23.11";
+  inputs.home-manager = {
+    url = "github:nix-community/home-manager/release-23.11";
+    inputs.nixpkgs.follows = "nixpkgs";
   };
+  inputs.hyprland.url = "github:hyprwm/Hyprland";
 
   outputs = {
     self,
@@ -26,6 +24,7 @@
     nixosConfigurations = {
       "calinpc" = lib.nixosSystem {
         inherit system;
+        specialArgs = {inherit inputs;};
 
         modules = [
           ./nixos/configuration.nix
