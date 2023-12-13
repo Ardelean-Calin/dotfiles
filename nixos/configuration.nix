@@ -96,6 +96,7 @@
     description = "Ardelean Calin";
     extraGroups = ["networkmanager" "wheel" "input"];
     shell = pkgs.fish;
+    useDefaultShell = false;
     packages = with pkgs; [
       firefox
       #  thunderbird
@@ -152,8 +153,18 @@
     user = "calin";
     dataDir = "/home/calin/";
   };
-  services.avahi.enable = true;
-  services.avahi.nssmdns = true;
+  services.avahi = {
+    enable = true;
+    nssmdns = true;
+    publish = {
+      enable = true;
+      addresses = true;
+      domain = true;
+      hinfo = true;
+      userServices = true;
+      workstation = true;
+    };
+  };
   services.flatpak.enable = true;
 
   hardware.xpadneo.enable = true;
@@ -176,6 +187,8 @@
   virtualisation = {
     podman = {
       enable = true;
+      enableNvidia = true;
+      autoPrune.enable = true;
 
       # Create a `docker` alias for podman, to use it as a drop-in replacement
       dockerCompat = true;
@@ -185,7 +198,10 @@
     };
   };
 
-  programs.steam.enable = true;
+  programs.steam = {
+    enable = true;
+    remotePlay.openFirewall = true; # Open ports in the firewall for Steam Remote Play
+  };
   programs.hyprland = {
     enable = true;
     package = inputs.hyprland.packages.${pkgs.system}.hyprland;
