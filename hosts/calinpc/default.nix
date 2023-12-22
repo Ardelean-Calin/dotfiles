@@ -8,10 +8,8 @@
     # ./virtualisation
   ];
 
-  programs.dconf.enable = true;
-
-  xdg.portal = {
+  config.nixpkgs.config.cudaSupport = true;
+  config.services.ollama = {
     enable = true;
-    wlr.enable = true;
   };
 }

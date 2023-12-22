@@ -6,10 +6,13 @@
     inputs.nixpkgs.follows = "nixpkgs";
   };
   inputs.hyprland.url = "github:hyprwm/Hyprland";
+  # My Ollama Nix Flake
+  inputs.ollama-cuda.url = "github:Ardelean-Calin/ollama-nix";
 
   outputs = {
     self,
     nixpkgs,
+    ollama-cuda,
     ...
   } @ inputs: let
     system = "x86_64-linux";
@@ -24,10 +27,14 @@
     nixosConfigurations = {
       "calinpc" = lib.nixosSystem {
         inherit system;
-        specialArgs = {inherit inputs;};
+        specialArgs = {
+          inherit inputs;
+        };
 
         modules = [
+          ollama-cuda.nixosModules.default
           ./nixos/configuration.nix
+          ./hosts/calinpc
         ];
       };
     };

@@ -48,13 +48,6 @@
     LC_TIME = "ro_RO.UTF-8";
   };
 
-  # Enable the X11 windowing system.
-  services.xserver.enable = true;
-
-  # Enable the GNOME Desktop Environment.
-  services.xserver.displayManager.gdm.enable = true;
-  services.xserver.desktopManager.gnome.enable = true;
-
   hardware.uinput.enable = true;
   users.groups.uinput.members = ["calin"];
   users.groups.input.members = ["calin"];
@@ -94,18 +87,36 @@
   users.users.calin = {
     isNormalUser = true;
     description = "Ardelean Calin";
-    extraGroups = ["networkmanager" "wheel" "input"];
+    extraGroups = ["networkmanager" "dialout" "wheel" "input"];
     shell = pkgs.fish;
     useDefaultShell = false;
     packages = with pkgs; [
       firefox
+      polybar
       #  thunderbird
     ];
   };
 
-  # Enable automatic login for the user.
-  services.xserver.displayManager.autoLogin.enable = true;
-  services.xserver.displayManager.autoLogin.user = "calin";
+  services.xserver = {
+    # Enable the X11 windowing system.
+    enable = true;
+    displayManager.autoLogin.enable = true;
+    # Enable automatic login for the user.
+    displayManager.autoLogin.user = "calin";
+    displayManager.defaultSession = "hyprland";
+    displayManager.gdm.enable = true;
+    desktopManager.xterm.enable = true;
+    # Enable the GNOME Desktop Environment.
+    desktopManager.gnome.enable = true;
+    windowManager.i3 = {
+      enable = true;
+      extraPackages = with pkgs; [
+        dmenu #application launcher most people use
+        # i3status # gives you the default i3 status bar
+        i3lock #default i3 screen locker
+      ];
+    };
+  };
 
   # Workaround for GNOME autologin: https://github.com/NixOS/nixpkgs/issues/103746#issuecomment-945091229
   systemd.services."getty@tty1".enable = false;
@@ -116,9 +127,9 @@
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget
-  environment.systemPackages = with pkgs; [
-    vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
-    helix
+  environment.systemPackages = [
+    pkgs.vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
+    pkgs.helix
   ];
   environment.shells = [pkgs.fish];
 
@@ -166,9 +177,18 @@
     };
   };
   services.flatpak.enable = true;
+  # Add picoprobe udev rules
+  services.udev.packages = [
+    pkgs.picoprobe-udev-rules
+  ];
+  services.udev.extraRules = ''
+    SUBSYSTEM=="usb", ATTR{idVendor}=="04f9", ATTR{idProduct}=="209b", MODE="0666"
+  '';
 
   hardware.xpadneo.enable = true;
   hardware.bluetooth.enable = true;
+  # Necessary for my logic analyzer to work
+  hardware.saleae-logic.enable = true;
   hardware.opengl = {
     enable = true;
     driSupport = true;
@@ -181,7 +201,7 @@
     powerManagement.finegrained = false;
     open = false;
     nvidiaSettings = true;
-    # package = config.boot.kernelpackages.nvidiapackages.stable;
+    package = config.boot.kernelPackages.nvidiaPackages.stable;
   };
 
   virtualisation = {
@@ -189,7 +209,6 @@
       enable = true;
       enableNvidia = true;
       autoPrune.enable = true;
-
       # Create a `docker` alias for podman, to use it as a drop-in replacement
       dockerCompat = true;
 
@@ -204,6 +223,7 @@
   };
   programs.hyprland = {
     enable = true;
+    enableNvidiaPatches = true;
     package = inputs.hyprland.packages.${pkgs.system}.hyprland;
   };
   programs.waybar.enable = true;

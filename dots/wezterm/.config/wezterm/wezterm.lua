@@ -8,16 +8,16 @@ local config = {}
 config.hide_tab_bar_if_only_one_tab = true
 config.default_prog = { "fish", "-l" }
 config.window_background_opacity = 0.95
--- config.enable_wayland = false
--- config.default_gui_startup_args = { "start", "--always-new-process" }
+config.enable_wayland = true
+config.default_gui_startup_args = { "start", "--always-new-process" }
 -- config.color_scheme_dirs = { home .. "/.cache/wal" }
 -- config.color_scheme = "wezterm-base16-wal"
 config.font = wezterm.font_with_fallback({
-	{ family = "Iosevka", stretch = "Expanded", weight = "Regular" },
+	-- { family = "Iosevka", stretch = "Expanded", weight = "Regular" },
 	"JetBrains Mono",
 	"Symbols Nerd Font",
 })
--- config.font_size = 13.0
+config.font_size = 13.0
 local gpus = wezterm.gui.enumerate_gpus()
 config.webgpu_preferred_adapter = gpus[2]
 config.front_end = "WebGpu"

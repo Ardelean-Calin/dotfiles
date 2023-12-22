@@ -34,6 +34,9 @@ skip-levels = 1
 [editor.lsp]
 display-inlay-hints = true
 
+[editor.search]
+smart-case = true
+
 [keys.insert]
 C-c = ["normal_mode", "toggle_comments", "insert_mode"]
 
