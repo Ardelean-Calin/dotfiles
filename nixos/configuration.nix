@@ -3,8 +3,10 @@
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 {
   inputs,
+  system,
   config,
   pkgs,
+  pkgs-master,
   ...
 }: {
   imports = [
@@ -19,6 +21,13 @@
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
+  boot.loader.systemd-boot.configurationLimit = 3;
+  # boot.kernelPackages = pkgs.linuxPackages_6_5;
+  # boot.loader.grub.enable = true;
+  # boot.loader.grub.efiSupport = true;
+  # boot.loader.grub.device = "nodev";
+  # boot.loader.grub.useOSProber = true;
+  # boot.loader.grub.configurationLimit = 3;
 
   networking.hostName = "CalinPC"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
@@ -52,12 +61,6 @@
   users.groups.uinput.members = ["calin"];
   users.groups.input.members = ["calin"];
 
-  # Configure keymap in X11
-  services.xserver = {
-    layout = "us";
-    xkbVariant = "";
-  };
-
   # Enable CUPS to print documents.
   services.printing.enable = true;
 
@@ -87,7 +90,7 @@
   users.users.calin = {
     isNormalUser = true;
     description = "Ardelean Calin";
-    extraGroups = ["networkmanager" "dialout" "wheel" "input"];
+    extraGroups = ["networkmanager" "dialout" "wheel" "input" "libvirtd"];
     shell = pkgs.fish;
     useDefaultShell = false;
     packages = with pkgs; [
@@ -100,22 +103,32 @@
   services.xserver = {
     # Enable the X11 windowing system.
     enable = true;
+    desktopManager = {
+      xterm.enable = false;
+    };
+    layout = "us";
+    xkbVariant = "";
+    # windowManager.i3 = {
+    #   enable = true;
+    #   extraPackages = with pkgs; [
+    #     dmenu #application launcher most people use
+    #     i3status # gives you the default i3 status bar
+    #     i3lock #default i3 screen locker
+    #     i3blocks #if you are planning on using i3blocks over i3status
+    #   ];
+    # };
+
     displayManager.autoLogin.enable = true;
     # Enable automatic login for the user.
     displayManager.autoLogin.user = "calin";
     displayManager.defaultSession = "hyprland";
+    # Enable the Gnome Desktop Environment.
     displayManager.gdm.enable = true;
-    desktopManager.xterm.enable = true;
-    # Enable the GNOME Desktop Environment.
-    desktopManager.gnome.enable = true;
-    windowManager.i3 = {
-      enable = true;
-      extraPackages = with pkgs; [
-        dmenu #application launcher most people use
-        # i3status # gives you the default i3 status bar
-        i3lock #default i3 screen locker
-      ];
-    };
+    # desktopManager.gnome.enable = true;
+  };
+  programs.sway = {
+    enable = true;
+    wrapperFeatures.gtk = true;
   };
 
   # Workaround for GNOME autologin: https://github.com/NixOS/nixpkgs/issues/103746#issuecomment-945091229
@@ -130,8 +143,27 @@
   environment.systemPackages = [
     pkgs.vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
     pkgs.helix
+    pkgs.unzip
+    pkgs-master.sunshine
+    inputs.nixpkgs-wayland.packages.${system}.wlr-randr
   ];
   environment.shells = [pkgs.fish];
+
+  programs.thunar.enable = true;
+  programs.thunar.plugins = with pkgs.xfce; [
+    thunar-archive-plugin
+    thunar-volman
+  ];
+  services.gvfs.enable = true; # Mount, trash, and other functionalities
+
+  security.wrappers = {
+    sunshine = {
+      owner = "root";
+      group = "root";
+      capabilities = "cap_sys_admin+p";
+      source = "${pkgs-master.sunshine}/bin/sunshine";
+    };
+  };
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
@@ -193,6 +225,11 @@
     enable = true;
     driSupport = true;
     driSupport32Bit = true;
+    extraPackages = with pkgs; [
+      vaapiVdpau
+      libvdpau-va-gl
+      libGL
+    ];
   };
   services.xserver.videoDrivers = ["nvidia"];
   hardware.nvidia = {
@@ -215,7 +252,13 @@
       # Required for containers under podman-compose to be able to talk to each other.
       defaultNetwork.settings.dns_enabled = true;
     };
+    libvirtd = {
+      enable = true;
+      qemu.ovmf.enable = true;
+      qemu.swtpm.enable = true;
+    };
   };
+  programs.virt-manager.enable = true;
 
   programs.steam = {
     enable = true;
@@ -223,14 +266,13 @@
   };
   programs.hyprland = {
     enable = true;
-    enableNvidiaPatches = true;
     package = inputs.hyprland.packages.${pkgs.system}.hyprland;
   };
   programs.waybar.enable = true;
 
   # Open ports in the firewall.
-  # networking.firewall.allowedTCPPorts = [ ... ];
-  # networking.firewall.allowedUDPPorts = [ ... ];
+  networking.firewall.allowedTCPPorts = [47984 47989 48010];
+  networking.firewall.allowedUDPPorts = [47998 47999 48000];
   # Or disable the firewall altogether.
   # networking.firewall.enable = false;
 

@@ -1,6 +1,8 @@
 {
   description = "Calin's NixOS Flake";
   inputs.nixpkgs.url = "github:NixOS/nixpkgs/release-23.11";
+  inputs.nixpkgs-master.url = "github:NixOS/nixpkgs/master";
+  inputs.nixpkgs-wayland.url = "github:nix-community/nixpkgs-wayland";
   inputs.home-manager = {
     url = "github:nix-community/home-manager/release-23.11";
     inputs.nixpkgs.follows = "nixpkgs";
@@ -12,6 +14,8 @@
   outputs = {
     self,
     nixpkgs,
+    nixpkgs-master,
+    nixpkgs-wayland,
     ollama-cuda,
     ...
   } @ inputs: let
@@ -23,12 +27,24 @@
         allowUnfree = true;
       };
     };
+    pkgs-master = import nixpkgs-master {
+      inherit system;
+      config = {
+        cudaSupport = true;
+        cudaCapabilities = ["8.6"];
+        cudaEnableForwardCompat = false;
+        allowUnfree = true;
+      };
+    };
   in {
     nixosConfigurations = {
       "calinpc" = lib.nixosSystem {
         inherit system;
         specialArgs = {
           inherit inputs;
+          inherit system;
+          inherit pkgs;
+          inherit pkgs-master;
         };
 
         modules = [

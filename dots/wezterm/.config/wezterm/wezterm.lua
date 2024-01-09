@@ -18,9 +18,9 @@ config.font = wezterm.font_with_fallback({
 	"Symbols Nerd Font",
 })
 config.font_size = 13.0
-local gpus = wezterm.gui.enumerate_gpus()
-config.webgpu_preferred_adapter = gpus[2]
-config.front_end = "WebGpu"
+-- local gpus = wezterm.gui.enumerate_gpus()
+-- config.webgpu_preferred_adapter = gpus[1]
+-- config.front_end = "WebGpu"
 
 config.leader = { key = "a", mods = "CTRL", timeout_milliseconds = 2000 }
 config.keys = {
