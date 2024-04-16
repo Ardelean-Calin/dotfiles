@@ -12,6 +12,7 @@ if [ ! -d "/nix" ]; then
 fi
 
 # 1.2 Create nix.conf if it doesn't exist
+mkdir -p "$HOME/.config/nix"
 touch "$HOME/.config/nix/nix.conf"
 
 # 1.3 Enable Nix Flakes
