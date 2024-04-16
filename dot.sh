@@ -6,7 +6,6 @@ if [ ! -d "/nix" ]; then
  echo "Nix isn't installed on this system. Installing nix..."
  echo "Please enter your root password to create the /nix directory:"
 
- sudo mkdir -p /nix
  sh <(curl -L https://nixos.org/nix/install) --no-daemon --yes
  
 fi
