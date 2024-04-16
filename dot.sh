@@ -7,7 +7,7 @@ if [ ! -d "/nix" ]; then
  echo "Please enter your root password to create the /nix directory:"
 
  sudo mkdir -p /nix
- sh <(curl -L https://nixos.org/nix/install) --no-daemon
+ sh <(curl -L https://nixos.org/nix/install) --no-daemon --yes
  
 fi
 
@@ -22,12 +22,14 @@ fi
 
 # Step 2:
 # Install and init home-manager
-if ! which home-manager; then
+if ! which -s home-manager; then
+  echo "Home manager not found. Installing..."
   nix run home-manager/release-23.11 -- init --switch
 fi
 
 # Clone the repository or update it
 if [ ! -d "$HOME/.config/home-manager/.git" ]; then
+  echo "Getting latest dotfiles..."
   rm -rf "$HOME/.config/home-manager"
   mkdir -p "$HOME/.config/home-manager"
   nix run nixpkgs#git -- clone https://github.com/Ardelean-Calin/dotfiles.git "$HOME/.config/home-manager"
