@@ -7,7 +7,7 @@ if [ ! -d "/nix" ]; then
  echo "Please enter your root password to create the /nix directory:"
 
  sh <(curl -L https://nixos.org/nix/install) --no-daemon --yes
- 
+ source "$HOME/.nix-profile/etc/profile.d/nix.sh"
 fi
 
 # 1.2 Create nix.conf if it doesn't exist
