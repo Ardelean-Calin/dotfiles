@@ -22,7 +22,7 @@ fi
 
 # Step 2:
 # Install and init home-manager
-if ! which -s home-manager; then
+if ! which home-manager 1> /dev/null; then
   echo "Home manager not found. Installing..."
   nix run home-manager/release-23.11 -- init --switch
 fi
