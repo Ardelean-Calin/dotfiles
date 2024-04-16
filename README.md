@@ -6,5 +6,5 @@ The goal is to have just one command which gets my latest dotfiles & software. T
 
 **To get started, simply open a terminal and run:**
 ```bash
-curl -s https://github.com/Ardelean-Calin/dotfiles/dot.sh | bash  
+curl -s https://raw.githubusercontent.com/Ardelean-Calin/dotfiles/main/dot.sh | bash  
 ```
